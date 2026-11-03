@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ETF 交易监测</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-top">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>ETF FLOW MONITOR</span>
+        </div>
+        <span id="marketStatus" class="status-chip is-loading">初始化中</span>
+      </div>
+      <h1>国家队动向<br><span>分钟级盯盘</span></h1>
+      <p class="lede">监测沪深300、上证50、中证1000、中证2000、创业板与 A500 主流 ETF 的放量和大额买入。</p>
+      <div class="hero-meta">
+        <span id="lastUpdate">最后更新 --</span>
+        <span class="divider"></span>
+        <span id="baselineLabel">基线：10 月 14 日前 20 日均量</span>
+      </div>
+    </header>
+
+    <section class="kpis" aria-label="监测概览">
+      <article class="kpi">
+        <span class="kpi-label">监测品种</span>
+        <strong id="kpiMonitored">0</strong>
+        <span class="kpi-foot">主流 ETF</span>
+      </article>
+      <article class="kpi">
+        <span class="kpi-label">放量品种</span>
+        <strong id="kpiSurge">0</strong>
+        <span class="kpi-foot">量比 ≥ 1.8</span>
+      </article>
+      <article class="kpi">
+        <span class="kpi-label">今日告警</span>
+        <strong id="kpiAlerts">0</strong>
+        <span class="kpi-foot">放量 / 大额买入</span>
+      </article>
+      <article class="kpi">
+        <span class="kpi-label">大额成交</span>
+        <strong id="kpiTicks">0</strong>
+        <span class="kpi-foot">单笔 ≥ 100 万</span>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>放量排行</h2>
+          <p class="panel-sub">今日累计成交量 / 基线均量</p>
+        </div>
+        <span class="pill">实时</span>
+      </div>
+      <div id="rankList" class="rank-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>信息流</h2>
+          <p class="panel-sub">盘中自动监测，触发后写入本地信息流</p>
+        </div>
+        <select id="groupSelect" class="select" aria-label="按指数筛选">
+          <option value="">全部指数</option>
+          <option value="沪深300">沪深300</option>
+          <option value="上证50">上证50</option>
+          <option value="中证1000">中证1000</option>
+          <option value="中证2000">中证2000</option>
+          <option value="创业板">创业板</option>
+          <option value="A500">A500</option>
+        </select>
+      </div>
+      <div class="type-tabs" id="typeTabs">
+        <button class="type-tab is-active" data-type="">全部</button>
+        <button class="type-tab" data-type="volume_surge">放量</button>
+        <button class="type-tab" data-type="single_large_buy">单笔大单</button>
+        <button class="type-tab" data-type="sustained_large_buy">持续大单</button>
+      </div>
+      <div id="feed" class="feed"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>ETF 明细</h2>
+          <p class="panel-sub" id="etfCount">0 只</p>
+        </div>
+        <span id="refreshHint" class="hint">每 15 秒刷新</span>
+      </div>
+      <div class="table-wrap">
+        <table class="etf-table">
+          <thead>
+            <tr>
+              <th>ETF</th>
+              <th class="col-group">指数</th>
+              <th class="col-price">最新价</th>
+              <th class="col-change">涨跌幅</th>
+              <th>量比</th>
+              <th>大额买入</th>
+              <th class="col-super">超大单净流入</th>
+              <th class="col-time">更新时间</th>
+            </tr>
+          </thead>
+          <tbody id="etfTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>数据来源：东方财富、腾讯公开行情</span>
+      <span>仅作交易观察，不构成投资建议</span>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="./app.js"></script>
+</body>
+</html>
